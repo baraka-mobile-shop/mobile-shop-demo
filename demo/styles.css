@@ -212,3 +212,20 @@ button.xls:hover{background:#0d6b38}
 .dot.bs{background:var(--ok)}
 .dot.bp{background:var(--gold)}
 @media print{.chart{box-shadow:none}}
+
+/* Mobile: items as cards, sell button always visible */
+@media (max-width:640px){
+  .tbl:has(.itbl){overflow:visible;background:none;border:0;box-shadow:none}
+  .itbl,.itbl tbody,.itbl tr,.itbl td{display:block;width:100%}
+  .itbl thead{display:none}
+  .itbl tr{background:var(--surf);border:1px solid var(--line);border-radius:var(--rad);padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
+  .itbl td{border:0;padding:2px 0}
+  .itbl td:nth-child(2),.itbl td:nth-child(3),.itbl td:nth-child(4),.itbl td:nth-child(5){display:inline-block;width:auto;margin-inline-end:14px;font-size:15px}
+  .itbl td:nth-child(3):before{content:"الكمية: ";color:var(--mute)}
+  .itbl td:nth-child(4):before{content:"الشراء: ";color:var(--mute)}
+  .itbl td:nth-child(5):before{content:"البيع: ";color:var(--mute)}
+  .itbl td:last-child{margin-top:8px}
+  .itbl .act{display:flex;flex-wrap:wrap;gap:6px}
+  .itbl .act button{flex:1 1 22%;padding:9px 6px}
+  .itbl .act button.sell{flex:1 1 100%;order:-1;font-size:17px;padding:12px}
+}
