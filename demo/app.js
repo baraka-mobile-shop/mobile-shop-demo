@@ -626,8 +626,9 @@ async function impParse(file) {
       if (isNaN(buy) || buy < 0 || g('buy') === '') return bad.push('صف ' + row + ': سعر الشراء ناقص');
       if (imei && seen.has(imei)) return bad.push('صف ' + row + ': السريال متكرر');
       if (imei) seen.add(imei);
+      if (imei && qty > 1) return bad.push('صف ' + row + ': فيه سريال والكمية أكتر من 1، اكتب كل جهاز في صف لوحده');
       const cat = impCat(g('cat'));
-      impRows.push({ name, cat, qty: imei ? Math.min(qty, 1) || 1 : qty, buy, sell, min: Math.floor(+normAr(g('min')) || 0), note: g('note'), spec: g('spec'), color: g('color'), battery: g('battery'), imei, barcode: imei || newCode(), supplier: '', added: Date.now(), taxAmt: cat === 'acc' ? 0 : Math.round(sell * vat) / 100 });
+      impRows.push({ name, cat, qty, buy, sell, min: Math.floor(+normAr(g('min')) || 0), note: g('note'), spec: g('spec'), color: g('color'), battery: g('battery'), imei, barcode: imei || newCode(), supplier: '', added: Date.now(), taxAmt: cat === 'acc' ? 0 : Math.round(sell * vat) / 100 });
     });
     sum.innerHTML = '<b class="inn">هيتضاف ' + num(impRows.length) + ' صنف</b>' + (bad.length ? '<div class="out" style="margin-top:6px">اتخطى ' + num(bad.length) + ':</div><div class="note" style="max-height:110px;overflow:auto">' + bad.slice(0, 30).map(esc).join('<br>') + (bad.length > 30 ? '<br>...' : '') + '</div>' : '');
     $('#impOk').disabled = !impRows.length;
