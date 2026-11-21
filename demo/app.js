@@ -609,7 +609,8 @@ async function impParse(file) {
   if (!xlsGuard()) return;
   const sum = $('#impSum'); impRows = []; $('#impOk').disabled = true;
   try {
-    const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+    const isCsv = /\.(csv|txt)$/i.test(file.name || '') || /text|csv/.test(file.type || '');
+    const wb = isCsv ? XLSX.read((await file.text()).replace(/^\uFEFF/, ''), { type: 'string' }) : XLSX.read(await file.arrayBuffer(), { type: 'array' });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const raw = XLSX.utils.sheet_to_json(ws, { defval: '' });
     if (!raw.length) { sum.innerHTML = '<span class="out">الملف فاضي.</span>'; return; }
