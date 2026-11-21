@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سيستم محلات الموبايلات: مخزن، IMEI، أقساط، ورديات</title>
+<meta name="description" content="سيستم إدارة مخصوص لمحلات الموبايلات في مصر: مخزن بالسيريال، فواتير، أقساط، ورديات، تقارير ولوحة للمالك. يشتغل من أي موبايل أو كمبيوتر.">
+<meta name="theme-color" content="#0e2a47">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap">
+<style>
+:root{--navy:#0e2a47;--blue:#1668dc;--green:#0d8a5f;--ink:#0f1c2e;--mute:#5d6f82;--line:#dbe3ec;--bg:#eef2f7}
+*{box-sizing:border-box}body{margin:0;font:500 17px/1.7 Tajawal,Tahoma,Arial,sans-serif;color:var(--ink);background:#fff}
+a{color:inherit}.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+.hero{background:linear-gradient(135deg,var(--navy),#173a5e);color:#fff;padding:56px 0 64px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,46px);margin:0 0 12px;line-height:1.3}.hero p{margin:0 auto 26px;max-width:640px;opacity:.9;font-size:19px}
+.btn{display:inline-block;padding:13px 26px;border-radius:12px;font-weight:800;text-decoration:none;margin:5px;font-size:17px}
+.b1{background:#ffd970;color:#222}.b2{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.b3{background:var(--green);color:#fff}
+section{padding:50px 0}section.alt{background:var(--bg)}
+h2{text-align:center;font-size:30px;margin:0 0 8px}.sub{text-align:center;color:var(--mute);margin:0 0 30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(15,40,80,.06)}
+.card h3{margin:0 0 6px;font-size:20px}.card p{margin:0;color:var(--mute);font-size:16px}.ic{font-size:30px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;align-items:stretch}
+.plan{background:#fff;border:2px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column}
+.plan.top{border-color:var(--blue);box-shadow:0 6px 24px rgba(22,104,220,.18)}
+.plan h3{margin:0;font-size:22px}.price{font-size:34px;font-weight:800;margin:10px 0 0}.price small{font-size:16px;color:var(--mute);font-weight:500}
+.plan ul{padding:0 20px 0 0;margin:14px 0;flex:1}.plan li{margin:5px 0}
+.tag{background:var(--blue);color:#fff;border-radius:99px;padding:2px 12px;font-size:14px;align-self:flex-start;margin-bottom:6px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;counter-reset:s}
+.step{background:#fff;border-radius:14px;padding:18px;border:1px solid var(--line)}.step:before{counter-increment:s;content:counter(s);display:inline-flex;width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-weight:800;margin-bottom:8px}
+.cmp{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.cmp th,.cmp td{padding:12px 14px;text-align:right;border-bottom:1px solid var(--line)}.cmp th{background:var(--navy);color:#fff}.cmp td:first-child{font-weight:700}
+.y{color:var(--green);font-weight:800}.n{color:#c81e3a;font-weight:800}
+.note{color:var(--mute);font-size:14px;text-align:center;margin-top:14px}
+footer{background:var(--navy);color:#cfd9e6;text-align:center;padding:30px 0;font-size:15px}
+.cta{text-align:center}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <h1>سيستم مخصوص لمحل الموبايلات<br>مش كاشير عام</h1>
+  <p>مخزن بالـ IMEI، فواتير بيانات العميل، أقساط بجدول، ورديات بجرد كاش، ولوحة لصاحب المحل على موبايله. من غير تنصيب، ومن غير أجهزة غالية.</p>
+  <a class="btn b1" href="demo/">جرّب النسخة التجريبية الآن</a>
+  <a class="btn b2" href="#pricing">شوف الأسعار</a>
+  <a class="btn b2 wa-cta" id="waTop" href="#" style="display:none">كلمنا واتساب</a>
+</div></header>
+
+<section><div class="wrap">
+  <h2>اللي المحل بيحتاجه فعلاً</h2><p class="sub">كل خاصية معمولة عشان شغل محلات الموبايلات في مصر</p>
+  <div class="grid">
+    <div class="card"><div class="ic">📱</div><h3>مخزن بالـ IMEI والسيريال</h3><p>كل جهاز بسيريال وحالته وبطاريته. مسح الباركود أو الـ IMEI بكاميرا الموبايل. تنبيه لما صنف يقرب يخلص.</p></div>
+    <div class="card"><div class="ic">🧾</div><h3>فواتير بيانات العميل</h3><p>فاتورة بتتطبع باسم العميل ورقمه والرقم القومي، مع الضريبة والضمان. وإيصال شراء من العميل للمستعمل.</p></div>
+    <div class="card"><div class="ic">💳</div><h3>أقساط مظبوطة</h3><p>مقدم وعدد شهور وجدول دفعات وكشف حساب مطبوع. المتأخر يظهر بالأحمر، وزرار تذكير واتساب جاهز لكل عميل.</p></div>
+    <div class="card"><div class="ic">🕒</div><h3>ورديات وجرد كاش</h3><p>كل موظف يفتح ويقفل وردية، والسيستم يحسب الكاش المتوقع ويقارنه بالفعلي. مفيش «الدرج ناقص» من غير ما تعرف مين.</p></div>
+    <div class="card"><div class="ic">📊</div><h3>تقارير ورسم بياني</h3><p>مبيعات وأرباح اليوم والشهر، أكتر الأصناف مبيعاً، ومقارنة آخر ٦ شهور. تصدير Excel ونسخة احتياطية بضغطة.</p></div>
+    <div class="card"><div class="ic">🔒</div><h3>لوحة المالك وحماية</h3><p>صاحب المحل بيشوف كل حاجة من موبايله بالرقم السري، والكاشير يشوف شغله بس. كل جهاز بيتربط بكود، والبيانات محمية.</p></div>
+    <div class="card"><div class="ic">⚡</div><h3>لحظي على كل الأجهزة</h3><p>أي بيعة تظهر عند صاحب المحل في ثانية. شغال من الكمبيوتر والموبايل، ويتثبت كأبلكيشن على الشاشة.</p></div>
+    <div class="card"><div class="ic">🌙</div><h3>عربي بالكامل</h3><p>واجهة عربي من اليمين للشمال بلهجة المحلات، ووضع ليلي مريح للعين.</p></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <h2>ليه مش أي برنامج كاشير؟</h2><p class="sub">البرامج العامة معمولة لسوبر ماركت، مش لمحل موبايلات</p>
+  <table class="cmp"><thead><tr><th></th><th>سيستمنا</th><th>كاشير عام</th></tr></thead><tbody>
+    <tr><td>IMEI لكل جهاز</td><td class="y">✓</td><td class="n">غالباً لأ</td></tr>
+    <tr><td>أقساط بجدول وتذكير</td><td class="y">✓</td><td class="n">غالباً لأ</td></tr>
+    <tr><td>شراء مستعمل من العميل بإيصال</td><td class="y">✓</td><td class="n">لأ</td></tr>
+    <tr><td>لوحة صاحب المحل على الموبايل</td><td class="y">✓</td><td>أحياناً بإضافة</td></tr>
+    <tr><td>جهاز خاص أو تنصيب</td><td class="y">مش مطلوب</td><td>غالباً مطلوب</td></tr>
+  </tbody></table>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <h2>الأسعار المقترحة</h2><p class="sub">تجهيز مرة واحدة + اشتراك شهري صغير للصيانة والدعم</p>
+  <div class="plans">
+    <div class="plan"><h3>أساسي</h3><div class="price">3,500 <small>جنيه تجهيز</small></div><div>+ 250 جنيه / شهر</div>
+      <ul><li>مخزن بالـ IMEI والباركود</li><li>بيع وفواتير مطبوعة</li><li>شراء من عميل (مستعمل)</li><li>ورديات وجرد كاش</li><li>موظفين بأسماء</li></ul></div>
+    <div class="plan top"><span class="tag">الأكتر طلباً</span><h3>احترافي</h3><div class="price">6,000 <small>جنيه تجهيز</small></div><div>+ 350 جنيه / شهر</div>
+      <ul><li>كل مميزات الأساسي</li><li>الأقساط وجدول الدفعات والتذكير</li><li>الضمان والتقارير والرسم البياني</li><li>لوحة المالك على الموبايل</li><li>تصدير Excel ونسخ احتياطي</li><li>تدريب مجاني لفريق المحل</li></ul></div>
+    <div class="plan"><h3>فروع متعددة</h3><div class="price">حسب الطلب</div><div>&nbsp;</div>
+      <ul><li>كل مميزات الاحترافي</li><li>مخزن لكل فرع، ومالك يشوف الكل</li><li>تخصيص الفاتورة والشعار</li><li>نقل بيانات من برنامج قديم</li></ul></div>
+  </div>
+  <p class="note">أسعار مقترحة للبداية وقابلة للتعديل. أول شهر تجربة مجانية على محلك.</p>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <h2>تبدأ إزاي</h2><p class="sub">يوم واحد من أول رسالة لحد أول بيعة</p>
+  <div class="steps">
+    <div class="step"><b>جرّب الديمو</b><br>افتحه من موبايلك وخد جولة بنفسك.</div>
+    <div class="step"><b>نجهز نسختك</b><br>بنفصل بيانات محلك لوحدها ونكتب اسم المحل والفاتورة.</div>
+    <div class="step"><b>ننقل مخزنك</b><br>من ورق أو Excel أو برنامج قديم.</div>
+    <div class="step"><b>تدريب وتشغيل</b><br>نمرّن الكاشير ونربط موبايل المالك.</div>
+  </div>
+  <div class="cta" style="margin-top:34px"><a class="btn b3" href="demo/">ابدأ بالديمو</a> <a class="btn b3 wa-cta" id="waBot" href="#" style="display:none">كلمنا واتساب</a></div>
+</div></section>
+
+<footer><div class="wrap">سيستم محلات الموبايلات · النسخة التجريبية بيانات وهمية على جهازك ومش مربوطة بأي محل حقيقي</div></footer>
+<script>
+/* حط رقم واتساب بالصيغة الدولية بدون + (مثال: 2010xxxxxxxx) عشان يظهر زرار التواصل */
+var WA_NUMBER = '';
+if (WA_NUMBER) document.querySelectorAll('.wa-cta').forEach(function (a) {
+  a.href = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent('أهلاً، عايز أعرف أكتر عن سيستم محلات الموبايلات');
+  a.style.display = 'inline-block';
+});
+</script>
+</body>
+</html>
