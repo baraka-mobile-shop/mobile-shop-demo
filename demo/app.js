@@ -173,7 +173,7 @@ function renderItems() {
     ${['all', 'new', 'used', 'acc'].map(k => `<button class="mini ${cat === k ? 'pri' : ''}" data-cat="${k}">${k === 'all' ? 'الكل' : CATS[k]}</button>`).join('')}
   </div>`;
   if (!list.length) return head + `<div class="tbl"><div class="empty">${items().length ? 'مفيش نتايج للبحث ده.' : 'المخزن فاضي. اضغط «+ صنف جديد» وابدأ سجّل بضاعتك.'}</div></div>`;
-  return head + `<div class="tbl"><table><thead><tr><th>الصنف</th><th>النوع</th><th>الكمية</th><th class="cost">الشراء</th><th>البيع</th><th></th></tr></thead><tbody>` +
+  return head + `<div class="tbl"><table class="itbl"><thead><tr><th>الصنف</th><th>النوع</th><th>الكمية</th><th class="cost">الشراء</th><th>البيع</th><th></th></tr></thead><tbody>` +
     list.map(i => {
       const sold = i.qty === 0 && i.cat !== 'acc', low = !sold && i.qty <= i.min;
       return `<tr class="${sold ? 'sold' : low ? 'low' : ''}"><td><b>${esc(i.name)}</b>${specLine(i)}${i.note ? `<div class="note">${esc(i.note)}</div>` : ''}</td><td><span class="chip">${CATS[i.cat] || ''}</span></td><td><span class="qty">${num(i.qty)}</span>${sold ? ' <span class="tag-sold">اتباع</span>' : i.qty === 0 ? ' <span class="tag-out">خلص</span>' : low ? ' <span class="tag-out">قليل</span>' : ''}</td><td class="cost">${num(i.buy)}</td><td>${num(i.sell)}</td><td><div class="act"><button class="sell" data-a="sell" data-id="${i.id}"${i.qty && canW() ? '' : ' disabled'}>بيع</button><button data-a="in" data-id="${i.id}"${canW() ? '' : ' disabled'}>توريد</button><button data-a="view" data-id="${i.id}">كشف</button><button data-a="edit" data-id="${i.id}"${canW() ? '' : ' disabled'}>تعديل</button><button data-a="code" data-id="${i.id}">ملصق</button></div></td></tr>`;
