@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 <div id="demoBar" style="background:#ffd970;color:#222;text-align:center;padding:6px 10px;font-weight:700;font-size:14px">🧪 نسخة تجريبية: البيانات وهمية ومحفوظة على جهازك بس. الرقم السري للمالك: 1234 · <a href="#" onclick="DB.reset();return false" style="color:#0e2a47">إعادة ضبط</a> · <a href="../" style="color:#0e2a47">رجوع للعرض</a></div>
@@ -335,9 +335,17 @@
 
 <div id="printRoot"></div>
 
+<dialog id="dImport" class="dlg">
+  <h3>📤 استيراد المخزن من Excel</h3>
+  <p class="note">بدل ما تسجل كل صنف لوحده: حمّل القالب، املاه ببضاعتك (أو ألصق من ملفك القديم)، وارفعه. بيقبل Excel وCSV لحد 5000 صنف في المرة.</p>
+  <div class="act"><button id="impTpl" class="xls">تحميل القالب</button></div>
+  <div class="form"><label>اختار الملف<input id="impFile" type="file" accept=".xlsx,.xls,.csv"></label></div>
+  <div id="impSum" class="note"></div>
+  <div class="dlg-actions"><span class="sp"></span><button id="impCancel">إلغاء</button><button id="impOk" class="pri" disabled>استيراد</button></div>
+</dialog>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="config.js"></script>
 <script src="db.js"></script>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
