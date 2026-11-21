@@ -216,7 +216,9 @@ button.xls:hover{background:#0d6b38}
 /* Mobile: items as cards, sell button always visible */
 @media (max-width:640px){
   .tbl:has(.itbl){overflow:visible;background:none;border:0;box-shadow:none}
+  .itbl{min-width:0!important}
   .itbl,.itbl tbody,.itbl tr,.itbl td{display:block;width:100%}
+  .itbl tr{overflow:hidden}
   .itbl thead{display:none}
   .itbl tr{background:var(--surf);border:1px solid var(--line);border-radius:var(--rad);padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
   .itbl td{border:0;padding:2px 0}
