@@ -166,6 +166,7 @@ function renderItems() {
   <div class="bar">
     <button id="add" class="pri">+ صنف جديد</button>
     <button id="buyBtn">📥 شراء من عميل</button>
+    <button id="impBtn">📤 استيراد من Excel</button>
   </div>
   <div class="bar">
     <input type="search" id="q" placeholder="ابحث بالاسم أو السريال..." value="${esc(q)}">
@@ -568,6 +569,80 @@ async function moveOk() {
   busy = false;
 }
 
+
+/* ============ استيراد المخزن من Excel / CSV ============ */
+const IMP_COLS = [
+  ['name', 'الاسم', ['الاسم', 'اسم الصنف', 'الصنف', 'name', 'item']],
+  ['cat', 'النوع', ['النوع', 'التصنيف', 'type', 'category']],
+  ['qty', 'الكمية', ['الكمية', 'العدد', 'qty', 'quantity']],
+  ['buy', 'سعر الشراء', ['سعر الشراء', 'الشراء', 'التكلفة', 'buy', 'cost']],
+  ['sell', 'سعر البيع', ['سعر البيع', 'البيع', 'sell', 'price']],
+  ['min', 'الحد الأدنى', ['الحد الأدنى', 'حد الطلب', 'min']],
+  ['imei', 'IMEI او السريال', ['imei او السريال', 'imei', 'السريال', 'serial']],
+  ['color', 'اللون', ['اللون', 'color']],
+  ['spec', 'المواصفات', ['المواصفات', 'السعة', 'spec']],
+  ['battery', 'البطارية', ['البطارية', 'battery']],
+  ['note', 'ملاحظة', ['ملاحظة', 'ملاحظات', 'note']]
+];
+let impRows = [];
+const impNorm = h => normAr(h).toString().trim().toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/\s+/g, ' ');
+const impCat = v => { const t = impNorm(v); if (/مستعمل|used/.test(t)) return 'used'; if (/اكسسوار|accessor|acc/.test(t)) return 'acc'; return 'new'; };
+function openImport() {
+  if (!canW()) return toast('مفيش اتصال بالنت دلوقتي.', true);
+  if (!who()) { askWho(); return; }
+  impRows = []; $('#impFile').value = ''; $('#impSum').innerHTML = ''; $('#impOk').disabled = true;
+  $('#dImport').showModal();
+}
+function impTemplate() {
+  if (!xlsGuard()) return;
+  const rows = [IMP_COLS.map(c => c[1]),
+    ['iPhone 14 128GB', 'جديد', 2, 30000, 34000, 1, '356700000000100', 'أسود', '128GB', '', ''],
+    ['iPhone 11 مستعمل', 'مستعمل', 1, 9000, 11500, 0, '356700000000101', 'أبيض', '64GB', '82%', 'بحالة ممتازة'],
+    ['شاحن سريع 25W', 'اكسسوار', 20, 180, 320, 5, '', '', '', '', '']];
+  const ws = XLSX.utils.aoa_to_sheet(rows); ws['!cols'] = IMP_COLS.map(() => ({ wch: 18 })); ws['!views'] = [{ RTL: true }];
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'المخزن');
+  const info = XLSX.utils.aoa_to_sheet([['تعليمات'], ['الاسم والكمية وسعر الشراء مطلوبين. النوع: جديد أو مستعمل أو اكسسوار.'], ['السريال لازم يكون مختلف لكل جهاز. امسح الأمثلة وحط بضاعتك، واحفظ الملف Excel أو CSV.']]);
+  XLSX.utils.book_append_sheet(wb, info, 'تعليمات');
+  download('قالب-استيراد-المخزن.xlsx', new Blob([XLSX.write(wb, { type: 'array', bookType: 'xlsx' })], { type: 'application/octet-stream' }));
+}
+async function impParse(file) {
+  if (!xlsGuard()) return;
+  const sum = $('#impSum'); impRows = []; $('#impOk').disabled = true;
+  try {
+    const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const raw = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    if (!raw.length) { sum.innerHTML = '<span class="out">الملف فاضي.</span>'; return; }
+    if (raw.length > 5000) { sum.innerHTML = '<span class="out">الملف أكبر من 5000 صف. قسّمه لأكتر من ملف.</span>'; return; }
+    const map = {}; Object.keys(raw[0]).forEach(h => { const n = impNorm(h); IMP_COLS.forEach(c => { if (c[2].some(x => impNorm(x) === n)) map[c[0]] = h; }); });
+    if (!map.name) { sum.innerHTML = '<span class="out">مش لاقي عمود «الاسم». حمّل القالب واستخدمه.</span>'; return; }
+    const seen = new Set(items().filter(x => x.qty > 0 && x.imei).map(x => x.imei)), bad = [], vat = +shop().vat || 0;
+    raw.forEach((r, i) => {
+      const g = k => (map[k] ? String(r[map[k]] ?? '').trim() : '');
+      const name = g('name'); if (!name) return;
+      const qty = Math.floor(+normAr(g('qty') || 1)), buy = +normAr(g('buy')), sell = +normAr(g('sell')) || 0, imei = normAr(g('imei')).replace(/\s/g, '');
+      const row = i + 2;
+      if (!(qty >= 0) || isNaN(qty)) return bad.push('صف ' + row + ': الكمية غلط');
+      if (isNaN(buy) || buy < 0 || g('buy') === '') return bad.push('صف ' + row + ': سعر الشراء ناقص');
+      if (imei && seen.has(imei)) return bad.push('صف ' + row + ': السريال متكرر');
+      if (imei) seen.add(imei);
+      const cat = impCat(g('cat'));
+      impRows.push({ name, cat, qty: imei ? Math.min(qty, 1) || 1 : qty, buy, sell, min: Math.floor(+normAr(g('min')) || 0), note: g('note'), spec: g('spec'), color: g('color'), battery: g('battery'), imei, barcode: imei || newCode(), supplier: '', added: Date.now(), taxAmt: cat === 'acc' ? 0 : Math.round(sell * vat) / 100 });
+    });
+    sum.innerHTML = '<b class="inn">هيتضاف ' + num(impRows.length) + ' صنف</b>' + (bad.length ? '<div class="out" style="margin-top:6px">اتخطى ' + num(bad.length) + ':</div><div class="note" style="max-height:110px;overflow:auto">' + bad.slice(0, 30).map(esc).join('<br>') + (bad.length > 30 ? '<br>...' : '') + '</div>' : '');
+    $('#impOk').disabled = !impRows.length;
+  } catch (e) { console.error(e); sum.innerHTML = '<span class="out">مقدرناش نقرا الملف. اتأكد إنه Excel أو CSV.</span>'; }
+}
+async function impOk() {
+  if (!impRows.length || busy) return; busy = true; $('#impOk').disabled = true;
+  try {
+    let n = 0;
+    for (const d of impRows) { const id = DB.uid(); await DB.putItem(id, d); await addLog(id, d.name, d.buy, 'in', d.qty, d.buy); n++; }
+    $('#dImport').close(); impRows = []; render(); toast('اتضاف ' + num(n) + ' صنف للمخزن ✓');
+  } catch (e) { console.error(e); $('#impSum').innerHTML = '<span class="out">حصلت مشكلة في النص. اللي اتضاف فضل متسجل، افتح الاستيراد تاني.</span>'; }
+  busy = false;
+}
+
 /* ============ شراء من عميل ============ */
 function openBuy() {
   if (!canW()) return toast('مفيش اتصال بالنت دلوقتي.', true);
@@ -782,6 +857,7 @@ function bind() {
     if (cat) { renderItems.cat = cat.dataset.cat; render(); return; }
     if (e.target.id === 'add') return openItem(null);
     if (e.target.id === 'buyBtn') return openBuy();
+    if (e.target.id === 'impBtn') return openImport();
     if (e.target.id === 'setBtn') return openSet();
     if (e.target.id === 'xlsInv') return xlsItems();
     if (e.target.id === 'xlsLog') return xlsLog();
@@ -856,6 +932,8 @@ function bind() {
 
   $('#whoList').onclick = e => { const b = e.target.closest('button'); if (b) $('#whoName').value = b.dataset.n; };
   $('#whoCancel').onclick = () => $('#dWho').close();
+  $('#impTpl').onclick = impTemplate; $('#impCancel').onclick = () => $('#dImport').close(); $('#impOk').onclick = impOk;
+  $('#impFile').onchange = e => { if (e.target.files[0]) impParse(e.target.files[0]); };
   $('#whoOk').onclick = () => { const n = $('#whoName').value.trim(); if (!n) return; try { localStorage.setItem('staff', n); } catch (e) {} $('#dWho').close(); render(); };
   $('#linkOk').onclick = linkOk;
   $('#linkPw').onkeydown = e => { if (e.key === 'Enter') linkOk(); };
